@@ -1,0 +1,63 @@
+using System.Collections.Generic;
+using Unity.Properties;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class script : MonoBehaviour
+{
+    private List<List<int>> listlist = new() { };
+    private List<int> ints = new() { };
+    public GameObject sprit0;
+    public GameObject sprit1;
+    public GameObject sprit2;
+    public GameObject sprit3;
+    public GameObject sprit4;
+    public GameObject sprit5;
+    public GameObject sprit6;
+    public GameObject sprit7;
+    private List<GameObject> spritelist = new List<GameObject> { };
+    private List<GameObject> spritegameob = new List<GameObject> { };
+
+    void Start()
+    {
+        Generas();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.G)) {
+            Generas();
+
+        }
+    }
+    void Generas()
+    {
+        for (int i = 0; i < spritegameob.Count; i++)
+        {
+            Destroy(spritegameob[i]);
+        }
+        spritegameob.Clear();
+        listlist.Clear();
+        spritelist = new List<GameObject>() { sprit0, sprit1, sprit2, sprit3, sprit4, sprit5, sprit6, sprit7 };
+        ints = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7 };
+        for (int i = 0; i < 10; i++)
+        {
+            List<int> listint = new List<int>();
+            for (int j = 0; j < 10; j++)
+            {
+                listint.Add(ints[Random.Range(0, ints.Count)]);
+            }
+            listlist.Add(listint);
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                GameObject clone;
+                clone = Instantiate(spritelist[listlist[i][j]]);
+                clone.transform.position = new Vector2(j * (-1), i * (-1));
+                spritegameob.Add(clone);
+            }
+        }
+    }
+}
