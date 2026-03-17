@@ -1,0 +1,54 @@
+using System.Collections.Generic;
+using NUnit.Framework;
+using UnityEngine;
+
+public class Script : MonoBehaviour
+{
+    public GameObject body;
+    public GameObject turret;
+    public Transform point;
+    Script1 Script1;
+    public int x;
+    public int y;
+    public int z;
+    void Start()
+    {
+    }
+
+    // Update is called once per frame
+    [System.Obsolete]
+    void Update()
+    {
+        float mindistant = 10;
+        GameObject objectt = null;
+        RaycastHit hit;
+        GameObject[] allObjects = FindObjectsOfType<GameObject>(true);
+        List<GameObject> objectsWithClone = new List<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name.Contains("Point"))
+            {
+                Vector3 vrdist = obj.transform.position;
+                if (Vector3.Distance(gameObject.transform.position, obj.transform.position) < mindistant) {
+                    mindistant = Vector3.Distance(gameObject.transform.position, obj.transform.position);
+                    objectt = obj;
+                }
+            }
+        }
+        if (objectt != null)
+        {
+            Vector3 directionToTarget = objectt.transform.position - turret.transform.position;
+
+            // Если перед модели направлен по оси X
+            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+            targetRotation *= Quaternion.Euler(x,y,z); // Корректировка для оси X
+
+            // Если перед модели направлен по оси Z (стандартно)
+            // Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+
+            turret.transform.rotation = Quaternion.Slerp(turret.transform.rotation, targetRotation, Time.deltaTime * 5f);
+
+            Script1 = objectt.GetComponent<Script1>();
+            Script1.Damage();
+        }
+    } }
